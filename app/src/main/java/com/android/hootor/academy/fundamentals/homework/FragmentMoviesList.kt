@@ -22,6 +22,11 @@ class FragmentMoviesList : Fragment() {
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        onClickListener = null
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
