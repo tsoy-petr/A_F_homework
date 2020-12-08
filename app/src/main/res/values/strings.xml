@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">Academy fundamentals homework</string>
     <string name="title_activity_movie_details">MovieDetailsActivity</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_toolbar">Movies list</string>
+    <string name="debug_137_min">137 MIN</string>
+    <string name="debug_avengers_end_game">Avengers: End Game</string>
+    <string name="debug_125_reviews">125 Reviews</string>
+    <string name="debug_action_adventure_drama">Action, Adventure, Drama</string>
+    <string name="debug_13_plus">13+</string>
 </resources>

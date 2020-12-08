@@ -27,12 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:textColor="@color/whiteText"
-            android:textSize="14sp"
+            android:textSize="@dimen/font_small"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_title_list"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_title_list"
-            tools:text="Movies list" />
+            android:text="@string/title_toolbar" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/movie_card_view"
@@ -51,29 +51,32 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#191926"
+                android:background="@color/backgroundColorItem"
                 android:paddingStart="1dp"
                 android:paddingTop="2dp"
                 android:paddingEnd="1dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/shapeableImageView2"
-                    android:layout_width="166dp"
-                    android:layout_height="248dp"
+                    android:id="@+id/iv_shapeable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginBottom="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize12dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize14dp"
                     app:srcCompat="@drawable/movie" />
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="248dp"
+                    android:layout_height="match_parent"
                     android:src="@drawable/bc_gradient_movie"
-                    app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView2"
-                    app:layout_constraintEnd_toEndOf="@+id/shapeableImageView2"
-                    app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
-                    app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_shapeable"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_shapeable"
+                    app:layout_constraintStart_toStartOf="@+id/iv_shapeable"
+                    app:layout_constraintTop_toTopOf="@+id/iv_shapeable" />
 
                 <TextView
                     android:id="@+id/tv_min"
@@ -82,13 +85,13 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    tools:text="137 MIN"
                     android:textColor="@color/textColorTitleTime"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/font_tiny"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/debug_137_min" />
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -97,13 +100,15 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="20dp"
-                    tools:text="Avengers: End Game"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/textColorNameFilm"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/font_small"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/debug_avengers_end_game" />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -120,17 +125,19 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tv_reviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    tools:text="125 Reviews"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/textColorReview"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/font_tiny"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ratingBar"
-                    app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+                    app:layout_constraintTop_toTopOf="@+id/ratingBar"
+                    android:text="@string/debug_125_reviews" />
 
                 <TextView
                     android:id="@+id/tv_tags"
@@ -139,33 +146,37 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="2dp"
-                    tools:text="Action, Adventure, Drama"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/textColorTag"
-                    android:textSize="8sp"
+                    android:textSize="@dimen/font_tiny"
                     app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/debug_action_adventure_drama" />
 
                 <TextView
                     android:id="@+id/tv_age"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bc_tv_age"
                     android:gravity="center"
-                    tools:text="13+"
                     android:textColor="@color/whiteText"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/font_smaller"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
-                    app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
+                    app:layout_constraintStart_toStartOf="@+id/iv_shapeable"
+                    app:layout_constraintTop_toTopOf="@+id/iv_shapeable"
+                    android:text="@string/debug_13_plus" />
 
                 <ImageView
                     android:id="@+id/iv_like"
                     android:layout_width="16dp"
                     android:layout_height="14dp"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/ic_like"
                     app:layout_constraintEnd_toEndOf="parent"

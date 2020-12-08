@@ -1,5 +1,6 @@
 package com.android.hootor.academy.fundamentals.homework
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,16 @@ import com.google.android.material.card.MaterialCardView
 
 class FragmentMoviesList : Fragment() {
 
-    lateinit var viewModel: MoviesListViewModel
+    private var onClickListener: OnClickListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            onClickListener = context as OnClickListener
+        } else {
+            throw RuntimeException("$context must implement FragmentMoviesList.OnClickListener")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,25 +30,18 @@ class FragmentMoviesList : Fragment() {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
         val movieCardView = view.findViewById<MaterialCardView>(R.id.movie_card_view)
         movieCardView.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.main_container,
-                    FragmentMoviesDetails()
-                )
-                .commit()
+            onClickListener?.onClickData()
         }
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViewModel()
-
+    companion object {
+        fun newInstance():FragmentMoviesList {
+            return FragmentMoviesList()
+        }
     }
 
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this)[MoviesListViewModel::class.java]
+    interface OnClickListener{
+        fun onClickData(): Unit
     }
 }
