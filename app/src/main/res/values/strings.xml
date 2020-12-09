@@ -8,9 +8,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_toolbar">Movies list</string>
-    <string name="debug_137_min">137 MIN</string>
-    <string name="debug_avengers_end_game">Avengers: End Game</string>
-    <string name="debug_125_reviews">125 Reviews</string>
-    <string name="debug_action_adventure_drama">Action, Adventure, Drama</string>
-    <string name="debug_13_plus">13+</string>
+    <string name="movie_137_min">137 MIN</string>
+    <string name="movie_avengers_end_game">Avengers: End Game</string>
+    <string name="movie_125_reviews">125 Reviews</string>
+    <string name="movie_action_adventure_drama">Action, Adventure, Drama</string>
+    <string name="movie_13_plus">13+</string>
 </resources>

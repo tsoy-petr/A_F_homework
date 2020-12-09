@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.OnClickListener {
         }
     }
 
-    override fun onClickData() {
+    override fun onDataClicked() {
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
             .add(

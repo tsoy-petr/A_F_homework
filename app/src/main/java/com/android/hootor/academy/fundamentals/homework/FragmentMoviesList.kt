@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.card.MaterialCardView
 
 class FragmentMoviesList : Fragment() {
@@ -17,8 +16,6 @@ class FragmentMoviesList : Fragment() {
         super.onAttach(context)
         if (context is MainActivity) {
             onClickListener = context as OnClickListener
-        } else {
-            throw RuntimeException("$context must implement FragmentMoviesList.OnClickListener")
         }
     }
 
@@ -35,7 +32,7 @@ class FragmentMoviesList : Fragment() {
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
         val movieCardView = view.findViewById<MaterialCardView>(R.id.movie_card_view)
         movieCardView.setOnClickListener {
-            onClickListener?.onClickData()
+            onClickListener?.onDataClicked()
         }
         return view
     }
@@ -47,6 +44,6 @@ class FragmentMoviesList : Fragment() {
     }
 
     interface OnClickListener{
-        fun onClickData(): Unit
+        fun onDataClicked()
     }
 }

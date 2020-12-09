@@ -91,7 +91,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:text="@string/debug_137_min" />
+                    android:text="@string/movie_137_min" />
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -108,7 +108,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:text="@string/debug_avengers_end_game" />
+                    android:text="@string/movie_avengers_end_game" />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -137,7 +137,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ratingBar"
                     app:layout_constraintTop_toTopOf="@+id/ratingBar"
-                    android:text="@string/debug_125_reviews" />
+                    android:text="@string/movie_125_reviews" />
 
                 <TextView
                     android:id="@+id/tv_tags"
@@ -153,7 +153,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:text="@string/debug_action_adventure_drama" />
+                    android:text="@string/movie_action_adventure_drama" />
 
                 <TextView
                     android:id="@+id/tv_age"
@@ -170,7 +170,7 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/iv_shapeable"
                     app:layout_constraintTop_toTopOf="@+id/iv_shapeable"
-                    android:text="@string/debug_13_plus" />
+                    android:text="@string/movie_13_plus" />
 
                 <ImageView
                     android:id="@+id/iv_like"
