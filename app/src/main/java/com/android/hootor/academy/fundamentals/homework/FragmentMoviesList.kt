@@ -14,8 +14,8 @@ class FragmentMoviesList : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is MainActivity) {
-            onClickListener = context as OnClickListener
+        if (context is OnClickListener) {
+            onClickListener = context
         }
     }
 
