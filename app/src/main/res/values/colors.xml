@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="whiteText">#FFFFFF</color>
+    <color name="strokeColorCardView">#FD404056</color>
+    <color name="textColorTitleTime">#565665</color>
+    <color name="textColorNameFilm">#ECECEC</color>
+    <color name="textColorReview">#6D6D80</color>
+    <color name="textColorTag">#FF3466</color>
+    <color name="backgroundColorItem">#191926</color>
 </resources>

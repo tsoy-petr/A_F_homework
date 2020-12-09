@@ -30,8 +30,20 @@
         <item name="maxHeight">10dp</item>
     </style>
 
+    <style name="RatingBar.List" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="colorControlNormal">#6D6D80</item>
+        <item name="colorControlActivated">#FF3365</item>
+        <item name="minHeight">8dp</item>
+        <item name="maxHeight">8dp</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
         <item name="cornerSize">10%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize14dp" parent="">
+        <item name="cornerSizeTopLeft">14dp</item>
+        <item name="cornerSizeTopRight">14dp</item>
     </style>
 
 </resources>
