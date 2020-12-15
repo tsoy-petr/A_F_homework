@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#191926">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_actor"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintCircleRadius="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+        tools:srcCompat="@drawable/movie_fatman"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_name_actor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="#D8D8D8"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_actor"
+        app:layout_constraintStart_toStartOf="@+id/iv_actor"
+        app:layout_constraintTop_toBottomOf="@+id/iv_actor"
+        tools:text="Barrington De La Roche" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,7 +74,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_name" />
 
         <TextView
-            android:id="@+id/tv_tagline"
+            android:id="@+id/tv_tagLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -102,7 +102,7 @@
             android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reviews"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tagline" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_tagLine" />
 
         <TextView
             android:id="@+id/tv_reviews"
@@ -115,10 +115,10 @@
             android:textColor="#6D6D80"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tagline" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_tagLine" />
 
         <TextView
-            android:id="@+id/tv_stotyline"
+            android:id="@+id/tv_storyline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -150,7 +150,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_stotyline" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_storyline" />
 
         <TextView
             android:id="@+id/tv_cast"

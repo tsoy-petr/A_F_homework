@@ -8,6 +8,8 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        makeStatusBarTransparent()
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(
@@ -17,12 +19,12 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.OnClickListener {
         }
     }
 
-    override fun onDataClicked() {
+    override fun onDataClicked(id: Int) {
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
             .add(
                 R.id.main_container,
-                FragmentMoviesDetails.newInstance()
+                FragmentMoviesDetails.newInstance(id)
             ).commit()
     }
 }
