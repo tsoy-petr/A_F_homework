@@ -90,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
             android:text="125 Reviews"
             android:textColor="#6D6D80"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            app:layout_constraintStart_toEndOf="@+id/rating_bar"
             app:layout_constraintTop_toBottomOf="@+id/tv_tagLine" />
 
         <TextView
@@ -133,7 +133,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+            app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
 
         <TextView
             android:id="@+id/tv_description"

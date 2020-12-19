@@ -13,15 +13,11 @@ import com.google.android.material.imageview.ShapeableImageView
 
 class ActorsAdapter() : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
 
-    inner class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val siv: ShapeableImageView = itemView.findViewById(R.id.iv_actor)
-        val nameActor: TextView = itemView.findViewById(R.id.tv_name_actor)
-    }
-
-    val diffCallback = object : DiffUtil.ItemCallback<Actor>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Actor>() {
         override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {
             return oldItem.name == newItem.name
         }
+
         override fun areContentsTheSame(oldItem: Actor, newItem: Actor): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
@@ -41,11 +37,19 @@ class ActorsAdapter() : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
 
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
         val actor = differ.currentList[position]
-        holder.itemView.apply {
-            Glide.with(this).load(actor.picture).into(holder.siv)
-            holder.nameActor.text = actor.name
-        }
+        holder.bind(actor)
     }
 
     override fun getItemCount() = differ.currentList.size
+
+    class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val siv: ShapeableImageView = itemView.findViewById(R.id.iv_actor)
+        private val nameActor: TextView = itemView.findViewById(R.id.tv_name_actor)
+
+        fun bind(actor: Actor) {
+            Glide.with(itemView).load(actor.picture).into(siv)
+            nameActor.text = actor.name
+        }
+    }
 }
+

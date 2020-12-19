@@ -1,6 +1,5 @@
 package com.android.hootor.academy.fundamentals.homework
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +14,8 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.*
 
-class MoviesAdapter constructor(val listener: (Int) -> Unit) :
+class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
-
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val siv: ShapeableImageView = itemView.findViewById(R.id.iv_shapeable)
-        val age: TextView = itemView.findViewById(R.id.tv_age)
-        val tags: TextView = itemView.findViewById(R.id.tv_tags)
-        val reviews: TextView = itemView.findViewById(R.id.tv_reviews)
-        val title: TextView = itemView.findViewById(R.id.tv_name)
-        val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        val runtime: TextView = itemView.findViewById(R.id.tv_min)
-        val movieCardView: MaterialCardView = itemView.findViewById(R.id.movie_card_view)
-    }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -51,11 +39,25 @@ class MoviesAdapter constructor(val listener: (Int) -> Unit) :
         )
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = differ.currentList[position]
-        Glide.with(holder.itemView).load(movie.poster).into(holder.siv)
-        holder.apply {
+        holder.bind(movie, listener)
+    }
+
+    override fun getItemCount() = differ.currentList.size
+
+    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val siv: ShapeableImageView = itemView.findViewById(R.id.iv_shapeable)
+        private val age: TextView = itemView.findViewById(R.id.tv_age)
+        private val tags: TextView = itemView.findViewById(R.id.tv_tags)
+        private val reviews: TextView = itemView.findViewById(R.id.tv_reviews)
+        private val title: TextView = itemView.findViewById(R.id.tv_name)
+        private val ratingBar: RatingBar = itemView.findViewById(R.id.rating_bar)
+        private val runtime: TextView = itemView.findViewById(R.id.tv_min)
+        private val movieCardView: MaterialCardView = itemView.findViewById(R.id.movie_card_view)
+
+        fun bind(movie: Movie, listener: (Int) -> Unit) {
+            Glide.with(itemView).load(movie.poster).into(siv)
             age.text = "${movie.minimumAge} +"
             tags.text =
                 movie.genres.joinToString(separator = " ") { it.name.capitalize(Locale.ROOT) }
@@ -68,7 +70,5 @@ class MoviesAdapter constructor(val listener: (Int) -> Unit) :
             }
         }
     }
-
-    override fun getItemCount() = differ.currentList.size
 
 }

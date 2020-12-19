@@ -75,7 +75,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -98,10 +98,10 @@
             android:textColor="@color/textColorReview"
             android:textSize="@dimen/font_tiny"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+            app:layout_constraintStart_toEndOf="@+id/rating_bar"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar" />
 
         <TextView
             android:id="@+id/tv_tags"
@@ -115,7 +115,7 @@
             android:text="@string/movie_action_adventure_drama"
             android:textColor="@color/textColorTag"
             android:textSize="@dimen/font_tiny"
-            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            app:layout_constraintBottom_toTopOf="@+id/rating_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

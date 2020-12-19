@@ -21,7 +21,7 @@ import java.util.*
 
 class FragmentMoviesDetails : Fragment() {
 
-    private var actorsAdapter: ActorsAdapter? = null
+    private lateinit var actorsAdapter: ActorsAdapter
     private var movie: Movie? = null
 
     override fun onCreateView(
@@ -55,10 +55,10 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movie?.apply {
-            setupView(view, this)
+        movie?.let {
+            setupView(view, it)
             setupRecyclerView(view.findViewById(R.id.rv_actors))
-            actorsAdapter?.submitList(this.actors)
+            actorsAdapter.submitList(it.actors)
         }
     }
 
@@ -85,7 +85,7 @@ class FragmentMoviesDetails : Fragment() {
         val name = view.findViewById<TextView>(R.id.tv_name)
         val age = view.findViewById<TextView>(R.id.tv_age)
         val tagLine = view.findViewById<TextView>(R.id.tv_tagLine)
-        val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+        val ratingBar = view.findViewById<RatingBar>(R.id.rating_bar)
         val reviews = view.findViewById<TextView>(R.id.tv_reviews)
         val description = view.findViewById<TextView>(R.id.tv_description)
         val cast = view.findViewById<TextView>(R.id.tv_cast)
@@ -105,7 +105,9 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     companion object {
-        const val KEY_ID = "id"
+
+        private const val KEY_ID = "id"
+
         fun newInstance(id: Int): FragmentMoviesDetails {
             val args = Bundle()
             args.putInt(KEY_ID, id)
