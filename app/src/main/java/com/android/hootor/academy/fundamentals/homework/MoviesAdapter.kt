@@ -53,7 +53,7 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
         private val reviews: TextView = itemView.findViewById(R.id.tv_reviews)
         private val title: TextView = itemView.findViewById(R.id.tv_name)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.rating_bar)
-        private val runtime: TextView = itemView.findViewById(R.id.tv_min)
+        private val runtime: TextView = itemView.findViewById(R.id.tv_age_limit)
         private val movieCardView: MaterialCardView = itemView.findViewById(R.id.movie_card_view)
 
         fun bind(movie: Movie, listener: (Int) -> Unit) {

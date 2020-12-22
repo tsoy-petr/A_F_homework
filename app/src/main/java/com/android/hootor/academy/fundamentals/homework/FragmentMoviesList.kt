@@ -1,16 +1,14 @@
 package com.android.hootor.academy.fundamentals.homework
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.data.MoviesRepository
-import com.android.hootor.academy.fundamentals.homework.uiFith.GridAutofitLayoutManager
-import com.android.hootor.academy.fundamentals.homework.uiFith.GridSpacesItemDecoration
-import com.android.hootor.academy.fundamentals.homework.uiFith.Utils
+import com.android.hootor.academy.fundamentals.homework.uifeature.GridAutofitLayoutManager
+import com.android.hootor.academy.fundamentals.homework.uifeature.GridSpacesItemDecoration
+import com.android.hootor.academy.fundamentals.homework.uifeature.Utils
 
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 

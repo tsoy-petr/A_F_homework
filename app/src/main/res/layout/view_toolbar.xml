@@ -19,13 +19,13 @@
         android:textColor="@color/whiteText"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/iv_button"
-        app:layout_constraintStart_toEndOf="@id/iv_button"
-        app:layout_constraintTop_toTopOf="@+id/iv_button"
+        app:layout_constraintBottom_toBottomOf="@id/iv_button_toolbar"
+        app:layout_constraintStart_toEndOf="@id/iv_button_toolbar"
+        app:layout_constraintTop_toTopOf="@+id/iv_button_toolbar"
         android:text="@string/title_movies_list_toolbar" />
 
     <ImageView
-        android:id="@+id/iv_button"
+        android:id="@+id/iv_button_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_normal"

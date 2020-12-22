@@ -43,7 +43,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_shapeable" />
 
         <TextView
-            android:id="@+id/tv_min"
+            android:id="@+id/tv_age_limit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
