@@ -17,7 +17,7 @@
         android:layout_marginStart="8dp"
         android:drawablePadding="@dimen/spacing_small"
         android:textColor="@color/whiteText"
-        android:textSize="14sp"
+        android:textSize="@dimen/font_small"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/iv_button_toolbar"
         app:layout_constraintStart_toEndOf="@id/iv_button_toolbar"

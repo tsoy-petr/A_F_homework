@@ -12,4 +12,7 @@
     <dimen name="spacing_small">10dp</dimen>
 
     <dimen name="item_movie_width">172dp</dimen>
+
+    <dimen name="radius_card_item">14dp</dimen>
+
 </resources>

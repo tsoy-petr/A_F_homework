@@ -6,7 +6,7 @@
     android:layout_height="296dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="14dp"
+    app:cardCornerRadius="@dimen/radius_card_item"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:strokeColor="@color/strokeColorCardView"
