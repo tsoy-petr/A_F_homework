@@ -11,18 +11,20 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.data.Movie
-import com.android.hootor.academy.fundamentals.homework.data.MoviesRepository
+import com.android.hootor.academy.fundamentals.homework.data.loadMovies
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.launch
 import java.util.*
 
 class FragmentMoviesDetails : Fragment() {
 
     private lateinit var actorsAdapter: ActorsAdapter
-    private var movie: Movie? = null
+    private var idMovie: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,8 +48,7 @@ class FragmentMoviesDetails : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (requireArguments().containsKey(KEY_ID)) {
-            val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
-            movie = MoviesRepository.fitchMovieById(idMovie)
+            idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
         } else {
             throw IllegalStateException("Fragment $this has null arguments")
         }
@@ -55,10 +56,14 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movie?.let {
-            setupView(view, it)
-            setupRecyclerView(view.findViewById(R.id.rv_actors))
-            actorsAdapter.submitList(it.actors)
+        idMovie?.let { id ->
+            lifecycleScope.launch {
+                val movie = loadMovies(requireContext()).first { it.id == id }
+                setupView(view, movie)
+                setupRecyclerView(view.findViewById(R.id.rv_actors))
+                actorsAdapter.submitList(movie.actors)
+            }
+
         }
     }
 
