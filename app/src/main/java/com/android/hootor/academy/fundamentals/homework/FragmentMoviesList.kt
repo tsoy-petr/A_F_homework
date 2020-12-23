@@ -37,7 +37,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         lifecycleScope.launch {
             movieAdapter.submitList(loadMovies(requireContext()))
         }
-//        movieAdapter.submitList(MoviesRepository.fitchMovies())
+
     }
 
     private fun setupRecyclerView(view: View) {
