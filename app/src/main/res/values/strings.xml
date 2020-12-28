@@ -13,4 +13,8 @@
     <string name="movie_125_reviews">125 Reviews</string>
     <string name="movie_action_adventure_drama">Action, Adventure, Drama</string>
     <string name="movie_13_plus">13+</string>
+    <string name="title_back">Back</string>
+    <string name="title_cast">Cast</string>
+    <string name="title_movies_list_toolbar">Movies list</string>
+    <string name="storyline">Storyline</string>
 </resources>
