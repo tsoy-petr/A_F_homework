@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -18,13 +19,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.data.Movie
 import com.android.hootor.academy.fundamentals.homework.data.loadMovies
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 
 class FragmentMoviesDetails : Fragment() {
 
     private lateinit var actorsAdapter: ActorsAdapter
-    private var idMovie: Int? = null
+    private lateinit var containerMovieDetail: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,29 +44,38 @@ class FragmentMoviesDetails : Fragment() {
         view.findViewById<TextView>(R.id.tv_back).setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        return view
-    }
+        containerMovieDetail = view.findViewById(R.id.container_movie_detail)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (requireArguments().containsKey(KEY_ID)) {
-            idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
-        } else {
-            throw IllegalStateException("Fragment $this has null arguments")
-        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        idMovie?.let { id ->
-            lifecycleScope.launch {
-                val movie = loadMovies(requireContext()).first { it.id == id }
-                setupView(view, movie)
-                setupRecyclerView(view.findViewById(R.id.rv_actors))
-                actorsAdapter.submitList(movie.actors)
+        setupRecyclerView(view.findViewById(R.id.rv_actors))
+        if (arguments != null && arguments?.containsKey(KEY_ID) == true) {
+            val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
+            idMovie.let { id ->
+                lifecycleScope.launch {
+                    try {
+                        val movie = loadMovies(requireContext()).first { it.id == id }
+                        setupView(view, movie)
+                        actorsAdapter.submitList(movie.actors)
+                    } catch (e: Exception) {
+                        showError(e.message)
+                    }
+                }
             }
-
+        } else {
+            requireActivity().supportFragmentManager.popBackStack()
         }
+    }
+
+    private fun showError(message: String?) {
+        Snackbar.make(
+            containerMovieDetail,
+            message ?: resources.getString(R.string.error_message),
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
     private fun setupRecyclerView(rv_actors: RecyclerView) {
