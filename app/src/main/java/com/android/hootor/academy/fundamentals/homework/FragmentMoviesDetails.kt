@@ -2,6 +2,7 @@ package com.android.hootor.academy.fundamentals.homework
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.android.hootor.academy.fundamentals.homework.data.Movie
 import com.android.hootor.academy.fundamentals.homework.data.loadMovies
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -27,6 +29,10 @@ class FragmentMoviesDetails : Fragment() {
 
     private lateinit var actorsAdapter: ActorsAdapter
     private lateinit var containerMovieDetail: ConstraintLayout
+
+    private val handler = CoroutineExceptionHandler { context, exception ->
+        Log.i("happy", "handled $exception")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,10 +58,10 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view.findViewById(R.id.rv_actors))
-        if (arguments != null && arguments?.containsKey(KEY_ID) == true) {
+        if (arguments?.containsKey(KEY_ID) == true) {
             val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
             idMovie.let { id ->
-                lifecycleScope.launch {
+                lifecycleScope.launch(handler) {
                     try {
                         val movie = loadMovies(requireContext()).first { it.id == id }
                         setupView(view, movie)

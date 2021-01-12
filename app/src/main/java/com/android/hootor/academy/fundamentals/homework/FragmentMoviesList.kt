@@ -2,6 +2,7 @@ package com.android.hootor.academy.fundamentals.homework
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import com.android.hootor.academy.fundamentals.homework.uifeature.GridAutofitLay
 import com.android.hootor.academy.fundamentals.homework.uifeature.GridSpacesItemDecoration
 import com.android.hootor.academy.fundamentals.homework.uifeature.Utils
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
@@ -20,6 +22,10 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     private lateinit var recyclerView: RecyclerView
     private lateinit var movieAdapter: MoviesAdapter
     private lateinit var containerMovieList: LinearLayout
+
+    private val handler = CoroutineExceptionHandler { context, exception ->
+        Log.i("happy", "handled $exception")
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -37,7 +43,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         super.onViewCreated(view, savedInstanceState)
 
         containerMovieList = view.findViewById(R.id.container_movie_list)
-        lifecycleScope.launch {
+        lifecycleScope.launch(handler) {
             setupRecyclerView(view)
             try {
                 val movies = loadMovies(requireContext())
