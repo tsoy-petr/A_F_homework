@@ -2,7 +2,6 @@ package com.android.hootor.academy.fundamentals.homework
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
@@ -24,7 +23,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     private lateinit var containerMovieList: LinearLayout
 
     private val handler = CoroutineExceptionHandler { context, exception ->
-        Log.i("happy", "handled $exception")
+        showError(exception.message)
     }
 
     override fun onAttach(context: Context) {
@@ -45,12 +44,8 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         containerMovieList = view.findViewById(R.id.container_movie_list)
         lifecycleScope.launch(handler) {
             setupRecyclerView(view)
-            try {
-                val movies = loadMovies(requireContext())
-                movieAdapter.submitList(movies)
-            } catch (e: Exception) {
-                showError(e.message)
-            }
+            val movies = loadMovies(requireContext())
+            movieAdapter.submitList(movies)
         }
     }
 

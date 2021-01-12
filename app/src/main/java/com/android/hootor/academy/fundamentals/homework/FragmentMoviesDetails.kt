@@ -2,7 +2,6 @@ package com.android.hootor.academy.fundamentals.homework
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,7 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var containerMovieDetail: ConstraintLayout
 
     private val handler = CoroutineExceptionHandler { context, exception ->
-        Log.i("happy", "handled $exception")
+        showError(exception.message)
     }
 
     override fun onCreateView(
@@ -62,14 +61,9 @@ class FragmentMoviesDetails : Fragment() {
             val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
             idMovie.let { id ->
                 lifecycleScope.launch(handler) {
-                    try {
-                        val movie = loadMovies(requireContext()).first { it.id == id }
-                        setupView(view, movie)
-                        actorsAdapter.submitList(movie.actors)
-                        throw Exception("Failed coroutine")
-                    } catch (e: Exception) {
-                        showError(e.message)
-                    }
+                    val movie = loadMovies(requireContext()).first { it.id == id }
+                    setupView(view, movie)
+                    actorsAdapter.submitList(movie.actors)
                 }
             }
         } else {
