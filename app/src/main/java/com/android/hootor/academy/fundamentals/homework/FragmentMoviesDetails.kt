@@ -66,6 +66,7 @@ class FragmentMoviesDetails : Fragment() {
                         val movie = loadMovies(requireContext()).first { it.id == id }
                         setupView(view, movie)
                         actorsAdapter.submitList(movie.actors)
+                        throw Exception("Failed coroutine")
                     } catch (e: Exception) {
                         showError(e.message)
                     }
