@@ -2,6 +2,8 @@ package com.android.hootor.academy.fundamentals.homework
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.android.hootor.academy.fundamentals.homework.ui.FragmentMovieDetails
+import com.android.hootor.academy.fundamentals.homework.ui.FragmentMoviesList
 
 class MainActivity : AppCompatActivity(), FragmentMoviesList.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.OnClickListener {
             .addToBackStack(null)
             .add(
                 R.id.main_container,
-                FragmentMoviesDetails.newInstance(id)
+                FragmentMovieDetails.newInstance(id)
             ).commit()
     }
 }

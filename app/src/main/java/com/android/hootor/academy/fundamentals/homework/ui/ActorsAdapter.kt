@@ -1,4 +1,4 @@
-package com.android.hootor.academy.fundamentals.homework
+package com.android.hootor.academy.fundamentals.homework.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.android.hootor.academy.fundamentals.homework.data.Actor
+import com.android.hootor.academy.fundamentals.homework.R
+import com.android.hootor.academy.fundamentals.homework.domain.models.Actor
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.imageview.ShapeableImageView
 
 class ActorsAdapter() : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
@@ -47,7 +49,15 @@ class ActorsAdapter() : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
         private val nameActor: TextView = itemView.findViewById(R.id.tv_name_actor)
 
         fun bind(actor: Actor) {
-            Glide.with(itemView).load(actor.picture).into(siv)
+            actor.picture?.also {
+                val pictureUrl = "https://image.tmdb.org/t/p/w342" + it
+                Glide.with(itemView)
+                    .load(pictureUrl)
+                    .placeholder(R.drawable.ic_base_image)
+                    .fallback(R.drawable.ic_base_image)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(siv)
+            }
             nameActor.text = actor.name
         }
     }

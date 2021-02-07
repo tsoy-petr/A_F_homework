@@ -33,8 +33,7 @@
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/orig" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="0dp"
@@ -116,7 +115,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:numStars="5"
-                android:rating="4"
                 android:stepSize="0.5"
                 android:theme="@style/RatingBar"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_reviews"

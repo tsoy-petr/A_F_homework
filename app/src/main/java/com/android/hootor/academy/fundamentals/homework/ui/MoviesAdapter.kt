@@ -1,4 +1,4 @@
-package com.android.hootor.academy.fundamentals.homework
+package com.android.hootor.academy.fundamentals.homework.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.android.hootor.academy.fundamentals.homework.data.Movie
+import com.android.hootor.academy.fundamentals.homework.R
+import com.android.hootor.academy.fundamentals.homework.domain.models.Movie
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.*
@@ -18,16 +20,16 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+            oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
-        }
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+            oldItem.hashCode() == newItem.hashCode()
     }
     private val differ = AsyncListDiffer(this, diffCallback)
-    fun submitList(list: List<Movie>) = differ.submitList(list)
+    fun submitList(newList: List<Movie>) {
+        differ.submitList(newList)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(
@@ -40,7 +42,7 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie = differ.currentList[position]
+        val movie: Movie = differ.currentList[position]
         holder.bind(movie, listener)
     }
 
@@ -57,7 +59,13 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
         private val movieCardView: MaterialCardView = itemView.findViewById(R.id.movie_card_view)
 
         fun bind(movie: Movie, listener: (Int) -> Unit) {
-            Glide.with(itemView).load(movie.poster).into(siv)
+            val posterUrl = if (movie.poster.contains("https://image.tmdb.org/t/p/w342")) {
+                movie.poster
+            } else "https://image.tmdb.org/t/p/w342" + movie.poster
+            Glide.with(itemView)
+                .load(posterUrl)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(siv)
             age.text = "${movie.minimumAge} +"
             tags.text =
                 movie.genres.joinToString(separator = " ") { it.name.capitalize(Locale.ROOT) }

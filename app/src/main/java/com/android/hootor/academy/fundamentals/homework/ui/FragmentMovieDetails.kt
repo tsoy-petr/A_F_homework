@@ -1,6 +1,8 @@
-package com.android.hootor.academy.fundamentals.homework
+package com.android.hootor.academy.fundamentals.homework.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,26 +14,31 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.hootor.academy.fundamentals.homework.data.Movie
-import com.android.hootor.academy.fundamentals.homework.data.loadMovies
+import com.android.hootor.academy.fundamentals.homework.R
+import com.android.hootor.academy.fundamentals.homework.domain.models.Movie
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
-class FragmentMoviesDetails : Fragment() {
+class FragmentMovieDetails : Fragment() {
+
+    private val model: MovieDetailViewModel by viewModels()
 
     private lateinit var actorsAdapter: ActorsAdapter
     private lateinit var containerMovieDetail: ConstraintLayout
-
-    private val handler = CoroutineExceptionHandler { context, exception ->
-        showError(exception.message)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,10 +67,17 @@ class FragmentMoviesDetails : Fragment() {
         if (arguments?.containsKey(KEY_ID) == true) {
             val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
             idMovie.let { id ->
-                lifecycleScope.launch(handler) {
-                    val movie = loadMovies(requireContext()).first { it.id == id }
-                    setupView(view, movie)
-                    actorsAdapter.submitList(movie.actors)
+                model.fetchMovie(id)
+                lifecycleScope.launchWhenCreated{
+                    model.flow.collectLatest { movie ->
+                        movie?.also {
+                            setupView(view, it)
+                            actorsAdapter.submitList(it.actors)
+                        }
+                    }
+                    model.error.collectLatest {
+                        showError(it)
+                    }
                 }
             }
         } else {
@@ -107,7 +121,14 @@ class FragmentMoviesDetails : Fragment() {
         val description = view.findViewById<TextView>(R.id.tv_description)
         val cast = view.findViewById<TextView>(R.id.tv_cast)
 
-        Glide.with(requireContext()).load(movie.backdrop).into(header)
+        movie.backdrop?.also {
+            val backdropUrl = "https://image.tmdb.org/t/p/original" + it
+            Glide.with(requireContext())
+                .load(backdropUrl)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(header)
+
+        }
         name.text = movie.title
         age.text = "${movie.minimumAge} +"
         tagLine.text =
@@ -125,10 +146,10 @@ class FragmentMoviesDetails : Fragment() {
 
         private const val KEY_ID = "id"
 
-        fun newInstance(id: Int): FragmentMoviesDetails {
+        fun newInstance(id: Int): FragmentMovieDetails {
             val args = Bundle()
             args.putInt(KEY_ID, id)
-            return FragmentMoviesDetails().apply {
+            return FragmentMovieDetails().apply {
                 arguments = args
             }
         }
