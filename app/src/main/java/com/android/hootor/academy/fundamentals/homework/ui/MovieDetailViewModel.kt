@@ -29,13 +29,11 @@ class MovieDetailViewModel(
 
     fun fetchMovie(movieId: Int) {
         viewModelScope.launch {
-            val result = movieDetailUseCase(MovieDetailUseCase.Params(movieId = movieId))
-            when (result) {
+            when (val result = movieDetailUseCase(MovieDetailUseCase.Params(movieId = movieId))) {
                 is Result.Success -> {
                     _flow.emit(result.data)
                 }
                 is Result.Error -> {
-                    Log.e("happy", result.exception.message.toString())
                     _error.emit(result.exception.message.toString())
                 }
             }

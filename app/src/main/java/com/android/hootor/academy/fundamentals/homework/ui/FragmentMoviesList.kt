@@ -2,7 +2,6 @@ package com.android.hootor.academy.fundamentals.homework.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -12,8 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.R
-import com.android.hootor.academy.fundamentals.homework.ui.pagination.NewPaginationScrollListener
-import com.android.hootor.academy.fundamentals.homework.ui.pagination.PaginationScrollListener
+import com.android.hootor.academy.fundamentals.homework.ui.pagination.MoviesPaginationScrollListener
 import com.android.hootor.academy.fundamentals.homework.uifeature.GridAutofitLayoutManager
 import com.android.hootor.academy.fundamentals.homework.uifeature.GridSpacesItemDecoration
 import com.android.hootor.academy.fundamentals.homework.uifeature.Utils
@@ -34,7 +32,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     private lateinit var containerMovieList: FrameLayout
     private lateinit var progressBar: ProgressBar
 
-    private var scrollListener: NewPaginationScrollListener? = null
+    private var scrollListener: MoviesPaginationScrollListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,14 +79,14 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
     private fun setupRecyclerView(view: View, bundle: Bundle?) {
 
-        var currentPage: Int = 1
-        var previousTotalItemCount: Int = 0
-        var startingPageIndex: Int = 1
+        var currentPage = 1
+        var previousTotalItemCount = 0
+        var startingPageIndex = 1
 
         if (bundle != null) {
-            currentPage = bundle.getInt("currentPage", 0)
-            previousTotalItemCount = bundle.getInt("previousTotalItemCount", 0)
-            startingPageIndex = bundle.getInt("startingPageIndex", 0)
+            currentPage = bundle.getInt(CURRENT_PAGE_KEY, currentPage)
+            previousTotalItemCount = bundle.getInt(PREVIOUS_TOTAL_ITEM_COUNT_KEY, previousTotalItemCount)
+            startingPageIndex = bundle.getInt(STARTING_PAGE_INDEX_KEY, startingPageIndex)
         }
 
         movieAdapter = MoviesAdapter(
@@ -102,21 +100,9 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
                 resources.getDimensionPixelSize(R.dimen.item_movie_width)
             )
             addItemDecoration(GridSpacesItemDecoration(Utils.dpToPx(requireContext(), 14), true))
-        //            addOnScrollListener(object :
-//                PaginationScrollListener(this.layoutManager as GridLayoutManager) {
-//                override fun loadMoreItems() {
-//                    isLoading = true
-//                    currentPage++
-//                    model.loadPagePopular(currentPage)
-//                }
-//
-//                override fun getTotalPageCount() = TOTAL_PAGES
-//                override fun isLastPage() = isLastPage
-//                override fun isLoading() = isLoading
-//            })
         }
         scrollListener = object :
-            NewPaginationScrollListener(
+            MoviesPaginationScrollListener(
                 currentPage, previousTotalItemCount, startingPageIndex, recyclerView.layoutManager as GridLayoutManager
             ) {
             override fun isLoading() = isLoading
@@ -127,15 +113,15 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
             }
 
         }
-        recyclerView.addOnScrollListener(scrollListener as NewPaginationScrollListener)
+        recyclerView.addOnScrollListener(scrollListener as MoviesPaginationScrollListener)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         scrollListener?.apply {
-            outState.putInt("currentPage", currentPage)
-            outState.putInt("previousTotalItemCount", previousTotalItemCount)
-            outState.putInt("startingPageIndex", startingPageIndex)
+            outState.putInt(CURRENT_PAGE_KEY, currentPage)
+            outState.putInt(PREVIOUS_TOTAL_ITEM_COUNT_KEY, previousTotalItemCount)
+            outState.putInt(STARTING_PAGE_INDEX_KEY, startingPageIndex)
         }
     }
 
@@ -143,6 +129,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         uiStateJob?.cancel()
         super.onStop()
     }
+
     private fun showError(message: String) {
         Snackbar.make(
             containerMovieList,
@@ -164,6 +151,11 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     companion object {
+
+        const val CURRENT_PAGE_KEY = "currentPage"
+        const val PREVIOUS_TOTAL_ITEM_COUNT_KEY = "previousTotalItemCount"
+        const val STARTING_PAGE_INDEX_KEY = "startingPageIndex"
+
         fun newInstance(): FragmentMoviesList {
             return FragmentMoviesList()
         }

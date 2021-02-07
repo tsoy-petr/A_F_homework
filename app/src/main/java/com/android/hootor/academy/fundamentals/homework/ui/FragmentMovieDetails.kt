@@ -1,8 +1,6 @@
 package com.android.hootor.academy.fundamentals.homework.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +12,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,20 +20,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.R
 import com.android.hootor.academy.fundamentals.homework.domain.models.Movie
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.util.*
 
 class FragmentMovieDetails : Fragment() {
 
     private val model: MovieDetailViewModel by viewModels()
-
+    private var uiStateJob: Job? = null
     private lateinit var actorsAdapter: ActorsAdapter
     private lateinit var containerMovieDetail: ConstraintLayout
 
@@ -68,7 +61,7 @@ class FragmentMovieDetails : Fragment() {
             val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
             idMovie.let { id ->
                 model.fetchMovie(id)
-                lifecycleScope.launchWhenCreated{
+                uiStateJob = lifecycleScope.launchWhenCreated{
                     model.flow.collectLatest { movie ->
                         movie?.also {
                             setupView(view, it)
@@ -122,7 +115,7 @@ class FragmentMovieDetails : Fragment() {
         val cast = view.findViewById<TextView>(R.id.tv_cast)
 
         movie.backdrop?.also {
-            val backdropUrl = "https://image.tmdb.org/t/p/original" + it
+            val backdropUrl = "https://image.tmdb.org/t/p/original$it"
             Glide.with(requireContext())
                 .load(backdropUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -140,6 +133,11 @@ class FragmentMovieDetails : Fragment() {
             0 -> View.GONE
             else -> View.VISIBLE
         }
+    }
+
+    override fun onStop() {
+        uiStateJob?.cancel()
+        super.onStop()
     }
 
     companion object {

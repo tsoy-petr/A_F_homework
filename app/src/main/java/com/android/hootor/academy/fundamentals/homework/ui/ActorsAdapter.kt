@@ -50,7 +50,7 @@ class ActorsAdapter() : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
 
         fun bind(actor: Actor) {
             actor.picture?.also {
-                val pictureUrl = "https://image.tmdb.org/t/p/w342" + it
+                val pictureUrl = "https://image.tmdb.org/t/p/w342$it"
                 Glide.with(itemView)
                     .load(pictureUrl)
                     .placeholder(R.drawable.ic_base_image)
