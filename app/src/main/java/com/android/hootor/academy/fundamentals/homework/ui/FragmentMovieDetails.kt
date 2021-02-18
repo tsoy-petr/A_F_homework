@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.R
 import com.android.hootor.academy.fundamentals.homework.domain.models.Movie
+import com.android.hootor.academy.fundamentals.homework.networking.MovieClient
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
@@ -58,14 +59,14 @@ class FragmentMovieDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view.findViewById(R.id.rv_actors))
         if (arguments?.containsKey(KEY_ID) == true) {
-            val idMovie = arguments?.getInt(KEY_ID, -1) ?: -1
-            idMovie.let { id ->
+            val movieId = arguments?.getInt(KEY_ID, -1) ?: -1
+            movieId.let { id ->
                 model.fetchMovie(id)
                 uiStateJob = lifecycleScope.launchWhenCreated{
-                    model.flow.collectLatest { movie ->
-                        movie?.also {
-                            setupView(view, it)
-                            actorsAdapter.submitList(it.actors)
+                    model.flow.collectLatest { data ->
+                        data?.also { movie ->
+                            setupView(view, movie)
+                            actorsAdapter.submitList(movie.actors)
                         }
                     }
                     model.error.collectLatest {
@@ -114,8 +115,8 @@ class FragmentMovieDetails : Fragment() {
         val description = view.findViewById<TextView>(R.id.tv_description)
         val cast = view.findViewById<TextView>(R.id.tv_cast)
 
-        movie.backdrop?.also {
-            val backdropUrl = "https://image.tmdb.org/t/p/original$it"
+        movie.backdrop?.also { backdrop ->
+            val backdropUrl = "${MovieClient.IMAGE_BASE_URL_ORIGINAL}$backdrop"
             Glide.with(requireContext())
                 .load(backdropUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())

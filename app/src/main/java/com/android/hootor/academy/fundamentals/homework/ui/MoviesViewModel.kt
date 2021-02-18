@@ -23,34 +23,35 @@ class MoviesViewModel(
     )
 ) : ViewModel() {
 
-    private var iter = 1
+    private var isScrolling = false
     private var getDataJob: Job? = null
-
+    private var breakingNewPage = 1
     private val _uiSate = MutableStateFlow(
         MoviesViewState(FetchStatus.Loading, mutableListOf())
     )
     val uiState = _uiSate.asStateFlow()
 
     init {
-        loadPagePopular(1)
+        loadPagePopular()
     }
 
-    fun loadPagePopular(page: Int?) {
+    private fun isLoading() = getDataJob?.isActive ?: false
+
+    private fun loadPagePopular() {
 
         if (getDataJob?.isActive == true) return
 
         getDataJob = viewModelScope.launch {
             _uiSate.value = _uiSate.value.copy(fetchStatus = FetchStatus.Loading)
-            val newPage = page ?: 1
-            val result = moviesUseCase(MoviesUseCase.Params(newPage))
+            val result = moviesUseCase(MoviesUseCase.Params(breakingNewPage))
             when (result) {
                 is Result.Success -> {
-                    val n = _uiSate.value.data + result.data
-                    n.onEach { movie ->
-                        movie.minimumAge = iter++
-                    }
-                    _uiSate.value = _uiSate.value.copy(fetchStatus = FetchStatus.AddMore,
-                    data = n)
+                    breakingNewPage++
+                    val newData = _uiSate.value.data + result.data
+                    _uiSate.value = _uiSate.value.copy(
+                        fetchStatus = FetchStatus.AddMore,
+                        data = newData
+                    )
                 }
                 is Result.Error -> {
                     _uiSate.value = _uiSate.value.copy(
@@ -61,6 +62,30 @@ class MoviesViewModel(
                 }
             }
         }
+    }
+
+    fun onLoadMoreTriggered(
+        firstVisibleItemPosition: Int,
+        visibleItemCount: Int,
+        totalItemCount: Int
+    ) {
+
+        val isNotLoading = !isLoading()
+        val isAtLastPage = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+        val isNotAtBeginning = firstVisibleItemPosition >= 0
+        val isTotalMoreThanVisible = totalItemCount >= MovieClient.QUERY_PAGE_SIZE
+
+        val shouldPaginate = isNotLoading && isAtLastPage
+                && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
+
+        if (shouldPaginate) {
+            loadPagePopular()
+            isScrolling = false
+        }
+    }
+
+    fun isScrolling() {
+        isScrolling = true
     }
 }
 

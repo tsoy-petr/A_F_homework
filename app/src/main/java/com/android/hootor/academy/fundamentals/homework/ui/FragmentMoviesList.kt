@@ -3,6 +3,7 @@ package com.android.hootor.academy.fundamentals.homework.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.AbsListView
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
@@ -11,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.hootor.academy.fundamentals.homework.R
-import com.android.hootor.academy.fundamentals.homework.ui.pagination.MoviesPaginationScrollListener
 import com.android.hootor.academy.fundamentals.homework.uifeature.GridAutofitLayoutManager
 import com.android.hootor.academy.fundamentals.homework.uifeature.GridSpacesItemDecoration
 import com.android.hootor.academy.fundamentals.homework.uifeature.Utils
@@ -20,19 +20,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.ExperimentalSerializationApi
 
+@ExperimentalSerializationApi
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
     private val model: MoviesViewModel by activityViewModels()
     private var uiStateJob: Job? = null
-    private var isLoading = false
 
     private var onClickListener: OnClickListener? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var movieAdapter: MoviesAdapter
     private lateinit var containerMovieList: FrameLayout
     private lateinit var progressBar: ProgressBar
-
-    private var scrollListener: MoviesPaginationScrollListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,8 +40,8 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     override fun onDetach() {
-        super.onDetach()
         onClickListener = null
+        super.onDetach()
     }
 
     @ExperimentalSerializationApi
@@ -52,7 +50,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
         containerMovieList = view.findViewById(R.id.container_movie_list)
         progressBar = view.findViewById(R.id.progressBar)
-        setupRecyclerView(view, savedInstanceState)
+        setupRecyclerView(view)
         model.apply {
             uiStateJob = lifecycleScope.launchWhenCreated {
                 uiState.collect {
@@ -68,7 +66,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
                             showLoading(false)
                         }
                         is FetchStatus.ShowError -> {
-                            showError(it.fetchStatus.message)
+                            showError(message = it.fetchStatus.message)
                             showLoading(false)
                         }
                     }
@@ -77,17 +75,7 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
-    private fun setupRecyclerView(view: View, bundle: Bundle?) {
-
-        var currentPage = 1
-        var previousTotalItemCount = 0
-        var startingPageIndex = 1
-
-        if (bundle != null) {
-            currentPage = bundle.getInt(CURRENT_PAGE_KEY, currentPage)
-            previousTotalItemCount = bundle.getInt(PREVIOUS_TOTAL_ITEM_COUNT_KEY, previousTotalItemCount)
-            startingPageIndex = bundle.getInt(STARTING_PAGE_INDEX_KEY, startingPageIndex)
-        }
+    private fun setupRecyclerView(view: View) {
 
         movieAdapter = MoviesAdapter(
             listener = ::onClickItemMovie
@@ -101,28 +89,31 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
             )
             addItemDecoration(GridSpacesItemDecoration(Utils.dpToPx(requireContext(), 14), true))
         }
-        scrollListener = object :
-            MoviesPaginationScrollListener(
-                currentPage, previousTotalItemCount, startingPageIndex, recyclerView.layoutManager as GridLayoutManager
-            ) {
-            override fun isLoading() = isLoading
 
-            override fun loadMoreItems(currentPage: Int) {
-                isLoading = true
-                model.loadPagePopular(currentPage)
+        val scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    model.isScrolling()
+                }
             }
 
-        }
-        recyclerView.addOnScrollListener(scrollListener as MoviesPaginationScrollListener)
-    }
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        scrollListener?.apply {
-            outState.putInt(CURRENT_PAGE_KEY, currentPage)
-            outState.putInt(PREVIOUS_TOTAL_ITEM_COUNT_KEY, previousTotalItemCount)
-            outState.putInt(STARTING_PAGE_INDEX_KEY, startingPageIndex)
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+
+                model.onLoadMoreTriggered(
+                    firstVisibleItemPosition,
+                    visibleItemCount,
+                    totalItemCount
+                )
+            }
         }
+        recyclerView.addOnScrollListener(scrollListener)
     }
 
     override fun onStop() {
@@ -139,7 +130,6 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun showLoading(flag: Boolean) {
-        isLoading = flag
         when (flag) {
             true -> progressBar.visibility = View.VISIBLE
             false -> progressBar.visibility = View.INVISIBLE
@@ -147,21 +137,16 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     private fun onClickItemMovie(id: Int) {
-        onClickListener?.onDataClicked(id)
+        onClickListener?.onMovieClicked(id)
     }
 
     companion object {
-
-        const val CURRENT_PAGE_KEY = "currentPage"
-        const val PREVIOUS_TOTAL_ITEM_COUNT_KEY = "previousTotalItemCount"
-        const val STARTING_PAGE_INDEX_KEY = "startingPageIndex"
-
         fun newInstance(): FragmentMoviesList {
             return FragmentMoviesList()
         }
     }
 
     interface OnClickListener {
-        fun onDataClicked(id: Int)
+        fun onMovieClicked(movieId: Int)
     }
 }

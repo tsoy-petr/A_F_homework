@@ -14,7 +14,7 @@ data class Movie(
     val overview: String,
 
     @SerialName("poster_path")
-    val poster: String,
+    var poster: String = "",
 
     @SerialName("backdrop_path")
     var backdrop: String? = null,
