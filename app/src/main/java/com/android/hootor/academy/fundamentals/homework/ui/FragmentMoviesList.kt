@@ -18,6 +18,7 @@ import com.android.hootor.academy.fundamentals.homework.uifeature.Utils
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
@@ -52,11 +53,11 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         progressBar = view.findViewById(R.id.progressBar)
         setupRecyclerView(view)
         model.apply {
-            uiStateJob = lifecycleScope.launchWhenCreated {
+            uiStateJob = lifecycleScope.launch {
                 uiState.collect {
                     when (it.fetchStatus) {
                         is FetchStatus.AddMore -> {
-                            movieAdapter.submitList(it.data)
+                            this@FragmentMoviesList.movieAdapter.submitList(it.data)
                             showLoading(false)
                         }
                         is FetchStatus.Loading -> {
@@ -93,9 +94,6 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         val scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    model.isScrolling()
-                }
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -116,9 +114,9 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         recyclerView.addOnScrollListener(scrollListener)
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         uiStateJob?.cancel()
-        super.onStop()
+        super.onDestroy()
     }
 
     private fun showError(message: String) {

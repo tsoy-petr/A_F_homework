@@ -14,13 +14,14 @@ data class Movie(
     val overview: String,
 
     @SerialName("poster_path")
-    var poster: String = "",
+    var poster: String? = null,
 
     @SerialName("backdrop_path")
     var backdrop: String? = null,
 
     @SerialName("vote_average")
     val ratings: Float,
+
     @SerialName("vote_count")
     val numberOfRatings: Int,
 

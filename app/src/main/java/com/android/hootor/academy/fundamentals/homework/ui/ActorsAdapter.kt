@@ -46,21 +46,25 @@ class ActorsAdapter : RecyclerView.Adapter<ActorsAdapter.ActorViewHolder>() {
     override fun getItemCount() = differ.currentList.size
 
     class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val shapeableImageView: ShapeableImageView = itemView.findViewById(R.id.iv_actor)
+        private val shareableImageView: ShapeableImageView = itemView.findViewById(R.id.iv_actor)
         private val nameActor: TextView = itemView.findViewById(R.id.tv_name_actor)
 
         fun bind(actor: Actor) {
             actor.picture?.also { picture ->
-                val pictureUrl = "${MovieClient.IMAGE_BASE_URL_342}$picture"
+                val pictureUrl = "${IMAGE_BASE_URL_342}$picture"
                 Glide.with(itemView)
                     .load(pictureUrl)
                     .placeholder(R.drawable.ic_base_image)
                     .fallback(R.drawable.ic_base_image)
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(shapeableImageView)
+                    .into(shareableImageView)
             }
             nameActor.text = actor.name
         }
+    }
+
+    companion object {
+        private const val IMAGE_BASE_URL_342 = "https://image.tmdb.org/t/p/w342"
     }
 }
 

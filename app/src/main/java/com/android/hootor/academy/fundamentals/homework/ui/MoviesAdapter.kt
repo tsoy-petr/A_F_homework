@@ -59,7 +59,7 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
         private val movieCardView: MaterialCardView = itemView.findViewById(R.id.movie_card_view)
 
         fun bind(movie: Movie, listener: (Int) -> Unit) {
-            val posterUrl = if (movie.poster.contains("https://image.tmdb.org/t/p/w342")) {
+            val posterUrl = if (movie.poster?.contains("https://image.tmdb.org/t/p/w342") == true) {
                 movie.poster
             } else "https://image.tmdb.org/t/p/w342" + movie.poster
             Glide.with(itemView)
@@ -79,4 +79,7 @@ class MoviesAdapter constructor(private val listener: (Int) -> Unit) :
         }
     }
 
+    override fun onFailedToRecycleView(holder: MovieViewHolder): Boolean {
+        return true
+    }
 }

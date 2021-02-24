@@ -23,7 +23,7 @@ class MoviesViewModel(
     )
 ) : ViewModel() {
 
-    private var isScrolling = false
+    private var isLastPage = false
     private var getDataJob: Job? = null
     private var breakingNewPage = 1
     private val _uiSate = MutableStateFlow(
@@ -35,8 +35,6 @@ class MoviesViewModel(
         loadPagePopular()
     }
 
-    private fun isLoading() = getDataJob?.isActive ?: false
-
     private fun loadPagePopular() {
 
         if (getDataJob?.isActive == true) return
@@ -46,12 +44,14 @@ class MoviesViewModel(
             val result = moviesUseCase(MoviesUseCase.Params(breakingNewPage))
             when (result) {
                 is Result.Success -> {
+                    isLastPage = result.data.isEmpty()
                     breakingNewPage++
                     val newData = _uiSate.value.data + result.data
-                    _uiSate.value = _uiSate.value.copy(
+                    val newState = _uiSate.value.copy(
                         fetchStatus = FetchStatus.AddMore,
                         data = newData
                     )
+                    _uiSate.value = newState
                 }
                 is Result.Error -> {
                     _uiSate.value = _uiSate.value.copy(
@@ -69,23 +69,20 @@ class MoviesViewModel(
         visibleItemCount: Int,
         totalItemCount: Int
     ) {
+        val isLoading = getDataJob?.isActive == true
 
-        val isNotLoading = !isLoading()
-        val isAtLastPage = firstVisibleItemPosition + visibleItemCount >= totalItemCount
-        val isNotAtBeginning = firstVisibleItemPosition >= 0
-        val isTotalMoreThanVisible = totalItemCount >= MovieClient.QUERY_PAGE_SIZE
-
-        val shouldPaginate = isNotLoading && isAtLastPage
-                && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
-
-        if (shouldPaginate) {
+        if (!isLoading && !isLastPage
+            && firstVisibleItemPosition >= 0
+            && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+            && totalItemCount >= QUERY_PAGE_SIZE
+        ) {
             loadPagePopular()
-            isScrolling = false
         }
+
     }
 
-    fun isScrolling() {
-        isScrolling = true
+    companion object {
+        private const val QUERY_PAGE_SIZE = 20
     }
 }
 
